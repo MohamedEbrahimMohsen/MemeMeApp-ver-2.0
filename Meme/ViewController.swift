@@ -10,12 +10,14 @@ import UIKit
 
 class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate{
 
+    //MARK: Local internal attributes
     var currentTextFieldOriginYPlusHeight: CGFloat = 0.0
     var memes:[Meme]!{
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.memes
     }
     var isMemeSaved:Bool = false
+    
     //MARK: Outlets
     @IBOutlet weak var originalImage: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -28,8 +30,6 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     //MARK: View Load Family
     override func viewDidLoad() {
         super.viewDidLoad()
-        topCommentTextField.delegate = self
-        bottomCommentTextField.delegate = self
         setTextFiledCommentsAttributes()
         shareButton.isEnabled = false
     }
@@ -47,33 +47,31 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     //MARK: Camera
     @IBAction func pickAnImageFromCamera(_ sender: UIBarButtonItem){
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = .camera
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true, completion: nil)
+        chooseImageFromCameraOrPhoto(source: .camera)
     }
 
     //MARK: Ablum
     @IBAction func pickAnImageFromAlbum(_ sender: UIBarButtonItem){
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true, completion: nil)
+        chooseImageFromCameraOrPhoto(source: .photoLibrary)
     }
     
     //MARK: Share Meme
     @IBAction func shareMeme(_ sender: UIBarButtonItem) {
         let memeImage = generateMemedImage()
         let activityViewController = UIActivityViewController(activityItems: [memeImage], applicationActivities: nil)
-        present(activityViewController, animated: true, completion: {self.save(memedImage: memeImage)})
+        
+        activityViewController.completionWithItemsHandler = { activity, completed, items, error in
+            if completed {
+                self.save(memedImage: memeImage)
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+
+        present(activityViewController, animated: true, completion: nil)
     }
     
     //MARK: New Meme
     @IBAction func cancelAndReturn(_ sender: UIBarButtonItem) {
-        if !isMemeSaved && self.shareButton.isEnabled{
-            let memeImage = generateMemedImage()
-            save(memedImage: memeImage)
-        }
         dismiss(animated: true, completion: nil)
     }
     
@@ -104,9 +102,8 @@ class MemeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func setAllNoneImageToBe(isHidded: Bool){
         self.topToolbar.isHidden = isHidded
         self.bottomToolbar.isHidden = isHidded
-        //self.navigationController?.isNavigationBarHidden = isHidded
-        self.topCommentTextField.isHidden = self.topCommentTextField.text == "Top" ? isHidded : self.topCommentTextField.isHidden
-        self.bottomCommentTextField.isHidden = self.bottomCommentTextField.text == "Bottom" ? isHidded : self.bottomCommentTextField.isHidden
+        self.topCommentTextField.isHidden = self.topCommentTextField.text == "TOP" ? isHidded : self.topCommentTextField.isHidden
+        self.bottomCommentTextField.isHidden = self.bottomCommentTextField.text == "BOTTOM" ? isHidded : self.bottomCommentTextField.isHidden
     }
 }
 

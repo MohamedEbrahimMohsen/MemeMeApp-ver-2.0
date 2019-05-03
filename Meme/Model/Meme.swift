@@ -16,7 +16,7 @@ struct Meme{
     var originalImage: UIImage!
     var memeImage: UIImage!
     var description: String!{
-        return  (self.topText == "Top" ? "" : self.topText) + (self.bottomText == "Bottom" ? "" : self.bottomText)
+        return  (self.topText == "TOP" ? "" : self.topText) + (self.bottomText == "BOTTOM" ? "" : self.bottomText)
     }
     
     init() {

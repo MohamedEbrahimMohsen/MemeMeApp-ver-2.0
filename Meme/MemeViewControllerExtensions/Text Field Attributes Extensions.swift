@@ -11,20 +11,22 @@ import UIKit
 
 //Text Field Comments Attributes
 extension MemeViewController{
-    func getMemeTextAttributes() -> [NSAttributedString.Key: Any] {
-        let memeTextAttributes: [NSAttributedString.Key: Any] = [
+    func setTextFiledCommentsAttributes(){
+        setupTextField(textField: self.topCommentTextField, text: "TOP")
+        setupTextField(textField: self.bottomCommentTextField, text: "BOTTOM")
+    }
+    
+    func setupTextField(textField: UITextField, text: String) {
+        textField.defaultTextAttributes = [
             NSAttributedString.Key(rawValue: NSAttributedString.Key.strokeColor.rawValue): UIColor.black,
             NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): UIColor.white,
             NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue): UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-            NSAttributedString.Key(rawValue: NSAttributedString.Key.strokeWidth.rawValue): -4.5]
-        return memeTextAttributes
-    }
-    
-    func setTextFiledCommentsAttributes(){
-        topCommentTextField.defaultTextAttributes = getMemeTextAttributes()
-        topCommentTextField.textAlignment = .center
-        topCommentTextField.textColor = .white
-        bottomCommentTextField.defaultTextAttributes = getMemeTextAttributes()
-        bottomCommentTextField.textAlignment = .center
+            NSAttributedString.Key(rawValue: NSAttributedString.Key.strokeWidth.rawValue): -4.5
+        ]
+        textField.textColor = UIColor.white
+        textField.tintColor = UIColor.white
+        textField.textAlignment = .center
+        textField.text = text
+        textField.delegate = self
     }
 }
