@@ -94,3 +94,5 @@ The scenes are described in detail below.
 > Camera
 
   # Demo
+  > [Udacity App Demo](https://youtu.be/KVQgqF6Fdfk)
+
